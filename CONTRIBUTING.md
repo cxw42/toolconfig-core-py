@@ -21,3 +21,12 @@ Then:
 3. `make test`
 4. `make prettyprint`
 5. Commit
+
+## Running the CLI
+
+```
+$ PYTHONPATH=src python -m toolconfig [ARGS]...
+```
+or run in an [editable install].
+
+[editable install]: https://setuptools.pypa.io/en/latest/userguide/development_mode.html

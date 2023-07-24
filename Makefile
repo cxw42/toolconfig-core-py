@@ -7,6 +7,11 @@
 init:
 	pip3 install -r requirements.txt -r requirements_dev.txt
 
+.PHONY: venv
+venv:
+	mkdir -p .venv
+	python3 -m venv .venv
+
 .PHONY: build dist
 dist: build
 build:
