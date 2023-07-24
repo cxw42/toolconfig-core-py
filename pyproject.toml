@@ -1,0 +1,23 @@
+[project]
+name = "toolconfig_core"
+version = "0.0.1"
+authors = [
+  { name="Christopher White", email="cxwembedded@gmail.com" },
+]
+description = "Core for ToolConfig"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/cxw42/toolconfig-core-py"
+"Bug Tracker" = "https://github.com/cxw42/toolconfig-core-py/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
