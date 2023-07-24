@@ -21,3 +21,7 @@ test:
 p: prettyprint
 prettyprint:
 	git ls-files | grep -E '\.py$$' | xargs black
+
+.PHONY: run
+run:
+	PYTHONPATH=src python -m toolconfig_core
