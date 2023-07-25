@@ -1,3 +1,11 @@
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+# Formatting
+[tool.black]
+extend-exclude = '\/ecpy\/'
+
+[tool.isort]
+profile = "black"
+extend_skip_glob = ["**/ecpy/*"]

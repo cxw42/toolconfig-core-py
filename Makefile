@@ -25,7 +25,8 @@ test:
 .PHONY: p prettyprint
 p: prettyprint
 prettyprint:
-	git ls-files | grep -E '\.py$$' | xargs black
+	isort src tests
+	black src tests
 
 .PHONY: run
 run:
