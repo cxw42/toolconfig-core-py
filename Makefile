@@ -31,3 +31,8 @@ prettyprint:
 .PHONY: run
 run:
 	PYTHONPATH=src python -m toolconfig_core
+
+.PHONY: editable
+editable:
+	-pip uninstall toolconfig_core
+	pip install --editable .
