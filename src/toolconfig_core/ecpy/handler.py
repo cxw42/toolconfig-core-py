@@ -3,7 +3,7 @@
 Provides ``EditorConfigHandler`` class for locating and parsing
 EditorConfig files relevant to a given filepath.
 
-Licensed under Simplified BSD License (see LICENSE.BSD file).
+Licensed under Simplified BSD License (see LICENSE file).
 
 """
 
