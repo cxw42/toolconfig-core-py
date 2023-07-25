@@ -8,6 +8,8 @@ import argparse
 
 import tomli_w
 
+from . import VERSION
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -29,6 +31,10 @@ def parse_args():
         default=".toolconfig.toml",
         help="Use FILENAME to find settings (default .toolconfig.toml)",
     )
+    parser.add_argument(
+        "--version", "-V", action="version", version=f"toolconfig-core-py {VERSION}"
+    )
+
     return parser.parse_args()
 
 
@@ -37,7 +43,7 @@ def main():
 
     configs = {}
     for abs_path in args.abs_path:
-        #handler = EditorConfigHandler(abs_path, args.filename)
+        # handler = EditorConfigHandler(abs_path, args.filename)
         configs[abs_path] = {"foo": 42}  # handler.get_configurations()
 
     # Produce output, always in sorted order of path name
