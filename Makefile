@@ -1,7 +1,7 @@
 # Makefile - convenience commands
 # Part of toolconfig-core-py
 # Copyright (c) 2023 Christopher White.
-# SPDX-License-Identifier: BSD-3-clause
+# SPDX-License-Identifier: BSD-2-Clause
 
 .PHONY: init
 init:
