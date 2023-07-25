@@ -2,6 +2,9 @@
 # Part of toolconfig-core-py
 # Copyright (c) 2023 Christopher White.
 # SPDX-License-Identifier: BSD-2-Clause
+"""
+toolconfig(1) CLI
+"""
 
 
 import argparse
@@ -14,6 +17,10 @@ from .ecpy.handler import ToolConfigHandler
 
 
 def parse_args():
+    """Parse the arguments.
+    Return:
+        argparse.Namespace: the parsed arguments
+    """
     parser = argparse.ArgumentParser(
         description="Get tool settings to apply to a particular file in a project"
     )
@@ -41,6 +48,7 @@ def parse_args():
 
 
 def main():
+    """CLI"""
     args = parse_args()
 
     configs = {}

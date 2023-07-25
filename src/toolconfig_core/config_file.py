@@ -5,7 +5,6 @@
 
 import tomli
 
-
 from .ecpy.exceptions import ParsingError
 
 

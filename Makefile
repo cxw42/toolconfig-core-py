@@ -36,3 +36,7 @@ run:
 editable:
 	-pip uninstall toolconfig_core
 	pip install --editable .
+
+.PHONY: lint
+lint:
+	pylint src tests
