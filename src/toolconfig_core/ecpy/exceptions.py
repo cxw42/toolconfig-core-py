@@ -1,27 +1,17 @@
-"""EditorConfig exception classes
+"""ToolConfig exception classes
 
-Licensed under Simplified BSD License (see LICENSE.BSD file).
+Licensed under Simplified BSD License (see LICENSE file).
 
 """
 
 
-class EditorConfigError(Exception):
-    """Parent class of all exceptions raised by EditorConfig"""
+class ToolConfigError(Exception):
+    """Parent class of all exceptions raised by ToolConfig"""
 
 
-try:
-    from ConfigParser import ParsingError as _ParsingError
-except:
-    from configparser import ParsingError as _ParsingError
+class ParsingError(ToolConfigError):
+    """Error raised if a ToolConfig file could not be parsed"""
 
 
-class ParsingError(_ParsingError, EditorConfigError):
-    """Error raised if an EditorConfig file could not be parsed"""
-
-
-class PathError(ValueError, EditorConfigError):
+class PathError(ToolConfigError):
     """Error raised if invalid filepath is specified"""
-
-
-class VersionError(ValueError, EditorConfigError):
-    """Error raised if invalid version number is specified"""

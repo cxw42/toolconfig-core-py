@@ -9,6 +9,8 @@ import argparse
 import tomli_w
 
 from . import VERSION
+from .config_file import ToolConfigFile
+from .ecpy.handler import ToolConfigHandler
 
 
 def parse_args():
@@ -43,7 +45,7 @@ def main():
 
     configs = {}
     for abs_path in args.abs_path:
-        # handler = EditorConfigHandler(abs_path, args.filename)
+        handler = ToolConfigHandler(ToolConfigFile, abs_path, args.filename)
         configs[abs_path] = {"foo": 42}  # handler.get_configurations()
 
     # Produce output, always in sorted order of path name
