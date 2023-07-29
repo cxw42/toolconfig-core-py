@@ -1,10 +1,8 @@
-# main.py - main CLI
 # Part of toolconfig-core-py
 # Copyright (c) 2023 Christopher White.
 # SPDX-License-Identifier: BSD-2-Clause
-"""
-toolconfig(1) CLI
-"""
+
+"""toolconfig(1) CLI"""
 
 
 import argparse
