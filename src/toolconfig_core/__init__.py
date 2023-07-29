@@ -5,3 +5,6 @@
 """Report tool configurations for files in a project."""
 
 VERSION = "0.0.1"
+
+EC_CONFIG_NAME = ".editorconfig"  # no alternative names permitted
+TC_CONFIG_NAME = ".toolconfig.toml"

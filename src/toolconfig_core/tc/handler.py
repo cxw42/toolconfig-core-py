@@ -9,21 +9,10 @@ Licensed under Simplified BSD License (see LICENSE file).
 
 import os
 
+from toolconfig_core.config_file import ConfigFile
 from toolconfig_core.exceptions import PathError
 
 __all__ = ["ToolConfigHandler"]
-
-
-def get_filenames(path, filename):
-    """Yield full filepath for filename in each directory in and above path"""
-    path_list = []
-    while True:
-        path_list.append(os.path.join(path, filename))
-        newpath = os.path.dirname(path)
-        if path == newpath:
-            break
-        path = newpath
-    return path_list
 
 
 class ToolConfigHandler(object):
@@ -37,32 +26,31 @@ class ToolConfigHandler(object):
 
     """
 
-    def __init__(self, config_loader, filepath, conf_filename):
+    def __init__(self, abs_path):
         """Create ToolConfigHandler for matching given filepath"""
-        self.config_loader = config_loader
-        self.filepath = filepath
-        self.conf_filename = conf_filename
+        self.abs_path = abs_path
         self.options = None
+        self.root_dir = find_root_dir(abs_path)
+        self.check_assertions()
 
     def get_configurations(self):
         """
-        Find ToolConfig files and return all options matching filepath
+        Find ToolConfig files and return all options matching abs_path
 
         Special exceptions that may be raised by this function include:
 
-        - ``PathError``: self.filepath is not a valid absolute filepath
+        - ``PathError``: self.abs_path is not a valid absolute filepath
         - ``ParsingError``: improperly formatted ToolConfig file found
 
         """
 
-        self.check_assertions()
-        path, filename = os.path.split(self.filepath)
+        path, filename = os.path.split(self.abs_path)
         conf_files = get_filenames(path, self.conf_filename)
 
         # Attempt to find and parse every ToolConfig file in filetree
-        for filename in conf_files:
-            parser = self.config_loader(filename)
-            options = parser.get_options_for(self.filepath)
+        for d in dirs_for(self.abs_path):
+            parser = ConfigFile(d)
+            options = parser.get_options_for(self.abs_path)
 
             # Merge new ToolConfig file's options into current options
             old_options = self.options
@@ -78,10 +66,10 @@ class ToolConfigHandler(object):
         return self.options
 
     def check_assertions(self):
-        """Raise error if filepath has invalid values"""
+        """Raise error if abs_path has invalid values"""
 
-        # Raise ``PathError`` if filepath isn't an absolute path
-        if not os.path.isabs(self.filepath):
+        # Raise ``PathError`` if abs_path isn't an absolute path
+        if not os.path.isabs(self.abs_path):
             raise PathError("Input file must be a full path name.")
 
     def preprocess_values(self):

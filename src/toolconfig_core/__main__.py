@@ -10,7 +10,7 @@ import argparse
 import tomli_w
 
 from toolconfig_core import VERSION
-from toolconfig_core.config_file import ToolConfigFile
+from toolconfig_core.config_file import ToolConfigFile, find_root_dir, get_filenames
 from toolconfig_core.tc.handler import ToolConfigHandler
 
 
@@ -30,19 +30,17 @@ def parse_args():
         help="The absolute path to the file in the project",
     )
     parser.add_argument(
-        "--filename",
-        "-f",
-        type=str,
-        nargs=1,
-        metavar="FILENAME",
-        default=".toolconfig.toml",
-        help="Use FILENAME to find settings (default .toolconfig.toml)",
-    )
-    parser.add_argument(
         "--version", "-V", action="version", version=f"toolconfig-core-py {VERSION}"
     )
 
     return parser.parse_args()
+
+
+def get_options_for(abs_path, args):
+    """Get the options for ``abs_path``."""
+
+    handler = ToolConfigHandler(ToolConfigFile, abs_path, args.filename)
+    return handler.get_configurations()
 
 
 def main():
@@ -51,8 +49,7 @@ def main():
 
     configs = {}
     for abs_path in args.abs_path:
-        handler = ToolConfigHandler(ToolConfigFile, abs_path, args.filename)
-        configs[abs_path] = {"foo": 42}  # handler.get_configurations()
+        configs[abs_path] = process_target(abs_path, args)
 
     # Produce output, always in sorted order of path name
     output = {k: configs[k] for k in sorted(configs.keys())}
