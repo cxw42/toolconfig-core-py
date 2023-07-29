@@ -40,3 +40,7 @@ editable:
 .PHONY: lint
 lint:
 	pylint src tests
+
+.PHONY: html
+html:
+	$(MAKE) -C doc html
