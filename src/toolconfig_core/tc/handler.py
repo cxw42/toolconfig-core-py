@@ -9,7 +9,7 @@ Licensed under Simplified BSD License (see LICENSE file).
 
 import os
 
-from .exceptions import PathError
+from toolconfig_core.exceptions import PathError
 
 __all__ = ["ToolConfigHandler"]
 

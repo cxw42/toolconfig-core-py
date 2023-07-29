@@ -9,9 +9,9 @@ import argparse
 
 import tomli_w
 
-from . import VERSION
-from .config_file import ToolConfigFile
-from .ecpy.handler import ToolConfigHandler
+from toolconfig_core import VERSION
+from toolconfig_core.config_file import ToolConfigFile
+from toolconfig_core.tc.handler import ToolConfigHandler
 
 
 def parse_args():

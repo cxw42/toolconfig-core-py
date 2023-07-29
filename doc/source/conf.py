@@ -18,7 +18,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "src"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src"))
 
 
 # -- Project information -----------------------------------------------------
@@ -46,6 +46,7 @@ needs_sphinx = "2.1"  # for myst-parser
 # ones.
 extensions = [
     "myst_parser",
+    "sphinx_argparse_cli",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",

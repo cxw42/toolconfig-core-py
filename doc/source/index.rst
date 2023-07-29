@@ -10,9 +10,10 @@ Welcome to toolconfig-core's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   cli
    readme
    contributing
-   source/modules
+   modules
 
 Indices and tables
 ==================
