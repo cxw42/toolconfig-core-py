@@ -221,13 +221,16 @@ class EditorConfigFile(EditorConfigParser):
         if not self.file_exists:
             raise OSError(f"File {ec_filename} doesn't exist")
 
-    def settings_for(self, target_filename):
-        """Return the settings for target_filename, which may or may not exist.
+    def settings_for(self, target_path):
+        """Return the settings for target_path, which may or may not exist.
+
+        Args:
+            target_path (str): Absolute path
 
         Raises:
             OSError: If the EditorConfig file passed to __init__() does not exist.
         """
-        self.filename = target_filename
+        self.filename = target_path
 
         # Reset before reading --- start fresh with each call.
         self.options = OrderedDict()

@@ -4,6 +4,8 @@
 
 """Finding and processing ToolConfig files"""
 
+import os
+
 import tomli
 
 from toolconfig_core import EC_CONFIG_NAME, TC_CONFIG_NAME
@@ -28,10 +30,10 @@ class ToolConfigFile(object):
         with open(tc_path, "rb") as f:
             try:
                 self.config = tomli.load(f)
-            except tomli.TomliDecodeError as e:
-                raise ParsingError(f"Could not load {tc_filename}") from e
+            except tomli.TOMLDecodeError as e:
+                raise ParsingError(f"Could not load {tc_path}") from e
 
-    def get_options_for(target_path):
+    def settings_for(self, target_path):
         """Get the options applicable to a file.
 
         Args:
@@ -82,6 +84,19 @@ class ConfigFile(object):
             return self.ec.root_file
         else:
             return False
+
+    def settings_for(self, target_filename):
+        """Return the settings for target_path, which may or may not exist.
+
+        Args:
+            target_path (str): Absolute path
+        """
+        if self.tc:
+            return self.tc.settings_for(target_filename)
+        elif self.ec:
+            return self.ec.settings_for(target_filename)
+        else:
+            return {}
 
 
 def dirs_for(filename):
