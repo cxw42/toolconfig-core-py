@@ -1,20 +1,17 @@
-"""EditorConfig file handler
+"""ToolConfig file handler
 
-Provides ``EditorConfigHandler`` class for locating and parsing
-EditorConfig files relevant to a given filepath.
+Provides ``ToolConfigHandler`` class for locating and parsing
+ToolConfig files relevant to a given filepath.
 
-Licensed under Simplified BSD License (see LICENSE.BSD file).
+Licensed under Simplified BSD License (see LICENSE file).
 
 """
 
 import os
 
-from editorconfig import VERSION
-from editorconfig.exceptions import PathError, VersionError
-from editorconfig.ini import EditorConfigParser
+from .exceptions import PathError
 
-
-__all__ = ['EditorConfigHandler']
+__all__ = ["ToolConfigHandler"]
 
 
 def get_filenames(path, filename):
@@ -29,35 +26,32 @@ def get_filenames(path, filename):
     return path_list
 
 
-class EditorConfigHandler(object):
+class ToolConfigHandler(object):
 
     """
-    Allows locating and parsing of EditorConfig files for given filename
+    Allows locating and parsing of ToolConfig files for given filename
 
     In addition to the constructor a single public method is provided,
-    ``get_configurations`` which returns the EditorConfig options for
+    ``get_configurations`` which returns the ToolConfig options for
     the ``filepath`` specified to the constructor.
 
     """
 
-    def __init__(self, filepath, conf_filename='.editorconfig',
-                 version=VERSION):
-        """Create EditorConfigHandler for matching given filepath"""
+    def __init__(self, config_loader, filepath, conf_filename):
+        """Create ToolConfigHandler for matching given filepath"""
+        self.config_loader = config_loader
         self.filepath = filepath
         self.conf_filename = conf_filename
-        self.version = version
         self.options = None
 
     def get_configurations(self):
-
         """
-        Find EditorConfig files and return all options matching filepath
+        Find ToolConfig files and return all options matching filepath
 
         Special exceptions that may be raised by this function include:
 
-        - ``VersionError``: self.version is invalid EditorConfig version
         - ``PathError``: self.filepath is not a valid absolute filepath
-        - ``ParsingError``: improperly formatted EditorConfig file found
+        - ``ParsingError``: improperly formatted ToolConfig file found
 
         """
 
@@ -65,12 +59,12 @@ class EditorConfigHandler(object):
         path, filename = os.path.split(self.filepath)
         conf_files = get_filenames(path, self.conf_filename)
 
-        # Attempt to find and parse every EditorConfig file in filetree
+        # Attempt to find and parse every ToolConfig file in filetree
         for filename in conf_files:
-            parser = EditorConfigParser(self.filepath)
-            parser.read(filename)
+            parser = self.config_loader(filename)
+            options = parser.get_options_for(self.filepath)
 
-            # Merge new EditorConfig file's options into current options
+            # Merge new ToolConfig file's options into current options
             old_options = self.options
             self.options = parser.options
             if old_options:
@@ -84,44 +78,47 @@ class EditorConfigHandler(object):
         return self.options
 
     def check_assertions(self):
-
-        """Raise error if filepath or version have invalid values"""
+        """Raise error if filepath has invalid values"""
 
         # Raise ``PathError`` if filepath isn't an absolute path
         if not os.path.isabs(self.filepath):
             raise PathError("Input file must be a full path name.")
 
-        # Raise ``VersionError`` if version specified is greater than current
-        if self.version is not None and self.version[:3] > VERSION[:3]:
-            raise VersionError(
-                "Required version is greater than the current version.")
-
     def preprocess_values(self):
-
         """Preprocess option values for consumption by plugins"""
 
         opts = self.options
 
         # Lowercase option value for certain options
-        for name in ["end_of_line", "indent_style", "indent_size",
-                     "insert_final_newline", "trim_trailing_whitespace",
-                     "charset"]:
+        for name in [
+            "end_of_line",
+            "indent_style",
+            "indent_size",
+            "insert_final_newline",
+            "trim_trailing_whitespace",
+            "charset",
+        ]:
             if name in opts:
                 opts[name] = opts[name].lower()
 
         # Set indent_size to "tab" if indent_size is unspecified and
         # indent_style is set to "tab".
-        if (opts.get("indent_style") == "tab" and
-                not "indent_size" in opts and self.version >= (0, 10, 0)):
+        if opts.get("indent_style") == "tab" and not "indent_size" in opts:
             opts["indent_size"] = "tab"
 
         # Set tab_width to indent_size if indent_size is specified and
         # tab_width is unspecified
-        if ("indent_size" in opts and "tab_width" not in opts and
-                opts["indent_size"] != "tab"):
+        if (
+            "indent_size" in opts
+            and "tab_width" not in opts
+            and opts["indent_size"] != "tab"
+        ):
             opts["tab_width"] = opts["indent_size"]
 
         # Set indent_size to tab_width if indent_size is "tab"
-        if ("indent_size" in opts and "tab_width" in opts and
-                opts["indent_size"] == "tab"):
+        if (
+            "indent_size" in opts
+            and "tab_width" in opts
+            and opts["indent_size"] == "tab"
+        ):
             opts["indent_size"] = opts["tab_width"]
