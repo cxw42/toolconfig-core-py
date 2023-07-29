@@ -10,6 +10,7 @@ Changes to original ConfigParser:
 - Octothorpe can be used for comments (not just at beginning of line)
 - Only track INI options in sections that match target filename
 - Stop parsing files with when ``root = true`` is found
+- Add EditorConfigFile
 
 """
 
@@ -18,7 +19,7 @@ import re
 from codecs import open
 from collections import OrderedDict
 from os import sep
-from os.path import dirname, normpath
+from os.path import dirname, exists, normpath
 
 from toolconfig_core.ecpy.compat import u
 from toolconfig_core.ecpy.exceptions import ParsingError
@@ -98,13 +99,13 @@ class EditorConfigParser(object):
             glob = posixpath.join('**/', glob)
         return fnmatch(self.filename, glob)
 
-    def read(self, filename):
+    def read(self, ec_filename):
         """Read and parse single EditorConfig file"""
         try:
-            fp = open(filename, encoding='utf-8')
+            fp = open(ec_filename, encoding='utf-8')
         except IOError:
             return
-        self._read(fp, filename)
+        self._read(fp, ec_filename)
         fp.close()
 
     def _read(self, fp, fpname):
@@ -181,3 +182,52 @@ class EditorConfigParser(object):
 
     def optionxform(self, optionstr):
         return optionstr.lower()
+
+class EditorConfigFile(EditorConfigParser):
+    """A .editorconfig file.
+
+    Args:
+        ec_filename: The full path to the EditorConfig file to read
+
+    Raises:
+        OSError: if the file doesn't exist
+    """
+
+    def __init__(self, ec_filename):
+        super().__init__("\0")
+        self.file_exists = False
+        self.ec_filename = ec_filename
+
+        self.read(ec_filename)
+
+    def _read(self, *args):
+        """Record the fact that the file exists.
+
+        Do this here so that, after a settings_for() call, we know
+        for sure whether the file existed at read time.
+        """
+        super()._read(*args)
+        self.file_exists = True
+
+    def read(self, ec_filename):
+        """Read the file, throwing if it's absent.
+
+        Raises:
+            OSError: if the EC file doesn't exist
+        """
+        self.ec_filename = ec_filename
+        super().read(ec_filename)
+        if not self.file_exists:
+            raise OSError(f"File {ec_filename} doesn't exist")
+
+    def settings_for(target_filename):
+        self.filename = target_filename
+
+        # Reset before reading --- start fresh with each call.
+        self.options = OrderedDict()
+        self.root_file = False
+        self.file_exists = False
+
+        self.read(self.ec_filename)
+
+        return self.options

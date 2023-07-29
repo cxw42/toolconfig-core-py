@@ -6,5 +6,10 @@
 
 VERSION = "0.0.1"
 
-EC_CONFIG_NAME = ".editorconfig"  # no alternative names permitted
+#: Name of an EditorConfig file.
+#: No alternative names permitted.
+EC_CONFIG_NAME = ".editorconfig"
+
+#: Name of a ToolConfig file.
+#: No alternative names permitted.
 TC_CONFIG_NAME = ".toolconfig.toml"

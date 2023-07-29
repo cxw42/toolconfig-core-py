@@ -7,7 +7,7 @@
 import tomli
 
 from toolconfig_core import EC_CONFIG_NAME, TC_CONFIG_NAME
-from toolconfig_core.ecpy.ini import EditorConfigParser
+from toolconfig_core.ecpy.ini import EditorConfigFile
 from toolconfig_core.exceptions import ParsingError
 
 
@@ -48,8 +48,8 @@ class ToolConfigFile(object):
 class ConfigFile(object):
     """Load the config file in a directory.
 
-    Load the file called :ref:`TC_CONFIG_NAME` if it exists,
-    otherwise the file called :ref:`EC_CONFIG_NAME`.
+    Load the file called TC_CONFIG_NAME if it exists,
+    otherwise the file called EC_CONFIG_NAME.
 
     Args:
         dir_name (str): The directory to look in
@@ -68,10 +68,11 @@ class ConfigFile(object):
         except OSError:
             pass
 
-        self.ec = EditorConfigParser("UNUSED_FILENAME")
-        ec.read(
-            os.path.join(dir_name, EC_CONFIG_NAME)
-        )  # A no-op if the file doesn't exist
+        try:
+            self.ec = EditorConfigFile(os.path.join(dir_name, EC_CONFIG_NAME))
+            return
+        except OSError:
+            pass
 
     @property
     def is_root(self):
