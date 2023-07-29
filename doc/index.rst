@@ -10,10 +10,9 @@ Welcome to toolconfig-core's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-Main module
-===========
-
-.. automodule:: toolconfig_core
+   readme
+   contributing
+   source/modules
 
 Indices and tables
 ==================

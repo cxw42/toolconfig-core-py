@@ -23,5 +23,5 @@ class PathError(ValueError, ToolConfigError):
     """Error raised if invalid filepath is specified"""
 
 
-class VersionError(ValueError, EditorConfigError):
+class VersionError(ValueError, ToolConfigError):
     """Error raised if invalid version number is specified"""

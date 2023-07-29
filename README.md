@@ -1,3 +1,5 @@
-# toolconfig-core-py
+# README for toolconfig-core-py
 
-ToolConfig core in Python
+This is a [ToolConfig] core in Python.
+
+[ToolConfig]: https://github.com/editorconfig/editorconfig/issues/482

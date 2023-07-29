@@ -7,11 +7,11 @@ Licensed under Simplified BSD License (see LICENSE.BSD file).
 import getopt
 import sys
 
-from editorconfig import VERSION, __version__
-from editorconfig.compat import force_unicode
-from editorconfig.exceptions import ParsingError, PathError, VersionError
-from editorconfig.handler import EditorConfigHandler
-from editorconfig.versiontools import split_version
+from toolconfig_core.ecpy import VERSION, __version__
+from toolconfig_core.ecpy.compat import force_unicode
+from toolconfig_core.ecpy.exceptions import ParsingError, PathError, VersionError
+from toolconfig_core.ecpy.handler import EditorConfigHandler
+from toolconfig_core.ecpy.versiontools import split_version
 
 
 def version():

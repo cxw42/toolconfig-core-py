@@ -20,9 +20,9 @@ from collections import OrderedDict
 from os import sep
 from os.path import dirname, normpath
 
-from editorconfig.compat import u
-from editorconfig.exceptions import ParsingError
-from editorconfig.fnmatch import fnmatch
+from toolconfig_core.ecpy.compat import u
+from toolconfig_core.ecpy.exceptions import ParsingError
+from toolconfig_core.ecpy.fnmatch import fnmatch
 
 
 __all__ = ["ParsingError", "EditorConfigParser"]
