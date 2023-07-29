@@ -9,3 +9,9 @@ extend-exclude = '\/ecpy\/'
 [tool.isort]
 profile = "black"
 extend_skip_glob = ["**/ecpy/*"]
+
+# Testing
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]

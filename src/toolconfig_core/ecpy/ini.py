@@ -194,7 +194,8 @@ class EditorConfigFile(EditorConfigParser):
     """
 
     def __init__(self, ec_filename):
-        super().__init__("\0")
+        placeholder_filename = "\0"
+        super().__init__(placeholder_filename)
         self.file_exists = False
         self.ec_filename = ec_filename
 
@@ -220,7 +221,12 @@ class EditorConfigFile(EditorConfigParser):
         if not self.file_exists:
             raise OSError(f"File {ec_filename} doesn't exist")
 
-    def settings_for(target_filename):
+    def settings_for(self, target_filename):
+        """Return the settings for target_filename, which may or may not exist.
+
+        Raises:
+            OSError: If the EditorConfig file passed to __init__() does not exist.
+        """
         self.filename = target_filename
 
         # Reset before reading --- start fresh with each call.
