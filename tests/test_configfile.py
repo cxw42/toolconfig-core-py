@@ -52,6 +52,30 @@ answer = "tc"
     assert config == {"answer": "tc"}
 
 
+# Make sure later matches win in a toolconfig file.
+# Out of an abundance of paranoia, run this test several times.
+@pytest.mark.parametrize("i", range(10))
+def test_tcfile_section_order(i, tmp_path):
+    p = tmp_path / ".toolconfig.toml"
+    with open(p, "w") as f:
+        print(
+            """
+root=true
+['*']
+key = "value1"
+['*.txt']
+key = "value2"
+""",
+            file=f,
+        )
+
+    c = ConfigFile(tmp_path)
+
+    # The later value should win since both match.
+    config = c.settings_for(tmp_path / "foo.txt")
+    assert config == {"key": "value2"}
+
+
 def test_nonempty_ecfile(tmp_path):
     p = tmp_path / ".editorconfig"
     with open(p, "w") as f:

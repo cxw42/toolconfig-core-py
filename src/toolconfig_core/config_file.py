@@ -11,6 +11,7 @@ import tomli
 from toolconfig_core import EC_CONFIG_NAME, TC_CONFIG_NAME
 from toolconfig_core.ecpy.ini import EditorConfigFile
 from toolconfig_core.exceptions import ParsingError
+from toolconfig_core.glob import matches_filename
 
 
 class ToolConfigFile(object):
@@ -42,10 +43,10 @@ class ToolConfigFile(object):
         result = {}
         for glob, properties in self.config.items():
             # Skip top-level properties
-            if type(properties) != type(dict):
+            if type(properties) != dict:
                 continue
 
-            if not self.matches(target_path, glob):
+            if not matches_filename(self.tc_path, glob, target_path):
                 continue
 
             result.update(properties)
