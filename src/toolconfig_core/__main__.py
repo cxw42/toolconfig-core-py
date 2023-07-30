@@ -11,7 +11,7 @@ import tomli_w
 
 from toolconfig_core import EC_CONFIG_NAME, VERSION
 from toolconfig_core.config_file import ToolConfigFile, find_root_dir, get_filenames
-from toolconfig_core.tc.handler import ToolConfigHandler
+from toolconfig_core.handler import ToolConfigHandler
 
 
 def parse_args():
