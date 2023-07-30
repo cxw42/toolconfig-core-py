@@ -66,9 +66,10 @@ class ConfigFile(object):
 
     Args:
         dir_name (str): The directory to look in
+        ec_name (str): The name of EditorConfig files
     """
 
-    def __init__(self, dir_name):
+    def __init__(self, dir_name, ec_name=EC_CONFIG_NAME):
         self.dir_name = dir_name
         self.tc = None
         self.ec = None
@@ -82,7 +83,7 @@ class ConfigFile(object):
             pass
 
         try:
-            self.ec = EditorConfigFile(os.path.join(dir_name, EC_CONFIG_NAME))
+            self.ec = EditorConfigFile(os.path.join(dir_name, ec_name))
             return
         except OSError:
             pass

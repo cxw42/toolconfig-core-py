@@ -9,6 +9,7 @@ Licensed under Simplified BSD License (see LICENSE file).
 
 import os
 
+from toolconfig_core import EC_CONFIG_NAME
 from toolconfig_core.config_file import ConfigFile, dirs_for, find_root_dir
 from toolconfig_core.exceptions import PathError
 
@@ -24,13 +25,14 @@ class ToolConfigHandler(object):
 
     """
 
-    def __init__(self, abs_path):
+    def __init__(self, abs_path, ec_name=EC_CONFIG_NAME):
         """Create ToolConfigHandler for matching given abs_path"""
         if not os.path.isabs(abs_path):
             raise PathError("Input file must be a full path name.")
 
         self.abs_path = abs_path
         self.root_dir = find_root_dir(abs_path)
+        self.ec_name = ec_name
 
     def get_options(self):
         """
@@ -47,7 +49,7 @@ class ToolConfigHandler(object):
 
         # Attempt to find and parse every config file up to the root
         for d in dirs_for(self.abs_path):
-            parser = ConfigFile(d)
+            parser = ConfigFile(d, self.ec_name)
             options = parser.settings_for(self.abs_path)
             result.update(options)
 
