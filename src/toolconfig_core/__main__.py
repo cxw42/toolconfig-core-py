@@ -38,7 +38,6 @@ def parse_args():
         "--ec-filename",
         "-f",
         metavar="FILENAME",
-        nargs=1,
         help="Alternative name for .editorconfig files (TESTING ONLY).  Changes output format.",
     )
 
@@ -56,8 +55,7 @@ def print_ec_output(output):
 def main():
     """CLI"""
     args = parse_args()
-    ec_test_mode = "ec_filename" in args
-    ec_filename = args.ec_filename[0] if ec_test_mode else EC_CONFIG_NAME
+    ec_filename = args.ec_filename or EC_CONFIG_NAME
 
     options = {}
     for abs_path in args.abs_path:
@@ -67,8 +65,8 @@ def main():
     # Produce output, always in sorted order of path name
     output = {k: options[k] for k in sorted(options.keys())}
 
-    if ec_test_mode:
-        print_ec_output(output)
+    if args.ec_filename:
+        print_ec_output(output)  # editorconfig-core-test mode
     else:
         print(tomli_w.dumps(output))  # Normal output
 
