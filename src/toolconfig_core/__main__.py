@@ -39,20 +39,18 @@ def parse_args():
 def get_options_for(abs_path, args):
     """Get the options for ``abs_path``."""
 
-    handler = ToolConfigHandler(ToolConfigFile, abs_path, args.filename)
-    return handler.get_configurations()
-
 
 def main():
     """CLI"""
     args = parse_args()
 
-    configs = {}
+    options = {}
     for abs_path in args.abs_path:
-        configs[abs_path] = process_target(abs_path, args)
+        handler = ToolConfigHandler(abs_path)
+        options[abs_path] = handler.get_options()
 
     # Produce output, always in sorted order of path name
-    output = {k: configs[k] for k in sorted(configs.keys())}
+    output = {k: options[k] for k in sorted(options.keys())}
 
     print(tomli_w.dumps(output))
 

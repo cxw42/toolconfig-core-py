@@ -127,7 +127,7 @@ def find_root_dir(filename):
     for d in dirs_for(filename):
         last_dir = d
         config = ConfigFile(d)
-        if d.is_root:
+        if config.is_root:
             return d
 
     return last_dir
