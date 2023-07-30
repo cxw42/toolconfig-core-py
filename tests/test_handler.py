@@ -15,100 +15,109 @@ def test_nonabsolute_target():
         ToolConfigHandler("not-an-absolute-path")
 
 
-def test_basic(tmp_tree):
+def test_handler_tc(tmp_tree):
     tmp_tree.make(
         {
             EC_CONFIG_NAME: "root=true\n",
+            TC_CONFIG_NAME: "root=true\n['*']\nkey='value_tc'\n",
+            "dir": {"file1": "42\n"},
+        }
+    )
+    c = ToolConfigHandler(tmp_tree.root / "dir" / "file1").get_options()
+    assert c == {"key": "value_tc"}
+
+
+def test_handler_ec(tmp_tree):
+    tmp_tree.make(
+        {
+            EC_CONFIG_NAME: "root=true\n[*]\nkey=value_ec\n",
+            "dir": {"file1": "42\n"},
+        }
+    )
+    c = ToolConfigHandler(tmp_tree.root / "dir" / "file1").get_options()
+    assert c == {"key": "value_ec"}
+
+
+def test_handler_tc_hides_ec(tmp_tree):
+    tmp_tree.make(
+        {
+            EC_CONFIG_NAME: "root=true\n['*']\nkey='value_ec'\n",
             TC_CONFIG_NAME: "root=true\n",
             "dir": {"file1": "42\n"},
         }
     )
-    assert True  # TODO RESUME HERE
+    c = ToolConfigHandler(tmp_tree.root / "dir" / "file1").get_options()
+    # Since there is a TC file, the EC file is not processed
+    assert c == {}
 
 
-'''
-def test_empty_tcfile(tmp_path):
-    p = tmp_path / ".toolconfig.toml"
-    p.touch()
-    c = ConfigFile(tmp_path)
-    assert "ConfigFile did not throw"
-    assert not c.is_root
+def test_handler_tc_hides_ec_root(tmp_tree):
+    tmp_tree.make(
+        {
+            TC_CONFIG_NAME: "root=true\n['*']\nkey='value_tc_top'\n",
+            "dir": {TC_CONFIG_NAME: "", EC_CONFIG_NAME: "root=true\n", "file1": "42\n"},
+        }
+    )
+    c = ToolConfigHandler(tmp_tree.root / "dir" / "file1").get_options()
+    # Since there is a TC file in dir/, the EC file is not processed
+    assert c == {"key": "value_tc_top"}
 
 
-def test_empty_ecfile(tmp_path):
-    p = tmp_path / ".editorconfig"
-    p.touch()
-    c = ConfigFile(tmp_path)
-    assert "ConfigFile did not throw"
-    assert not c.is_root
+def test_handler_ec_root_taken_absent_tc(tmp_tree):
+    tmp_tree.make(
+        {
+            TC_CONFIG_NAME: "root=true\n['*']\nkey2='value_tc_top'\n",
+            "dir": {
+                EC_CONFIG_NAME: "root=true\n[*]\nkey1=value_ec_dir\n",
+                "file1": "42\n",
+            },
+        }
+    )
+    c = ToolConfigHandler(tmp_tree.root / "dir" / "file1").get_options()
+    # Since there is a TC file in dir/, the EC file is not processed
+    assert c == {"key1": "value_ec_dir"}
 
 
-def test_nonempty_tcfile(tmp_path):
-    p = tmp_path / ".toolconfig.toml"
-    with open(p, "w") as f:
-        print(
-            """
-root=true
-['*']
-answer = "tc"
-""",
-            file=f,
-        )
+def test_handler_empty_tcfile(tmp_tree):
+    tmp_tree.make(
+        {
+            TC_CONFIG_NAME: "root=true\n",  # isolate us from the environment
+            "dir": {TC_CONFIG_NAME: ""},
+        }
+    )
+    c = ToolConfigHandler(tmp_tree.root / "file1").get_options()
+    assert c == {}
 
-    c = ConfigFile(tmp_path)
-    assert "ConfigFile did not throw"
 
-    # Check some internals
-    assert c.tc
-    assert not c.ec
-
-    config = c.settings_for(tmp_path / "some_file")
-    assert config == {"answer": "tc"}
+def test_handler_empty_ecfile(tmp_tree):
+    tmp_tree.make(
+        {
+            EC_CONFIG_NAME: "root=true\n",  # isolate us from the environment
+            "dir": {EC_CONFIG_NAME: ""},
+        }
+    )
+    c = ToolConfigHandler(tmp_tree.root / "file1").get_options()
+    assert c == {}
 
 
 # Make sure later matches win in a toolconfig file.
 # Out of an abundance of paranoia, run this test several times.
 @pytest.mark.parametrize("i", range(10))
-def test_tcfile_section_order(i, tmp_path):
-    p = tmp_path / ".toolconfig.toml"
-    with open(p, "w") as f:
-        print(
-            """
-root=true
+def test_tcfile_section_order(i, tmp_tree):
+    tmp_tree.make(
+        {
+            TC_CONFIG_NAME: "root=true\n",
+            "dir": {
+                TC_CONFIG_NAME: """
 ['*']
 key = "value1"
 ['*.txt']
 key = "value2"
 """,
-            file=f,
-        )
+            },
+        }
+    )
 
-    c = ConfigFile(tmp_path)
-
+    c = ToolConfigHandler(tmp_tree.root / "dir" / "foo.txt").get_options()
     # The later value should win since both match.
-    config = c.settings_for(tmp_path / "foo.txt")
-    assert config == {"key": "value2"}
-
-
-def test_nonempty_ecfile(tmp_path):
-    p = tmp_path / ".editorconfig"
-    with open(p, "w") as f:
-        print(
-            """
-root=true
-[*]
-answer = ec
-""",
-            file=f,
-        )
-
-    c = ConfigFile(tmp_path)
-    assert "ConfigFile did not throw"
-
-    # Check some internals
-    assert not c.tc
-    assert c.ec
-
-    config = c.settings_for(tmp_path / "some_file")
-    assert config == {"answer": "ec"}
-    '''
+    assert c == {"key": "value2"}
