@@ -3,7 +3,8 @@
 # Copyright (c) 2023 Christopher White.
 # SPDX-License-Identifier: BSD-2-Clause
 
-.PHONY: init
+.PHONY: install-deps init
+install-deps: init
 init:
 	pip3 install -r requirements.txt -r requirements_dev.txt
 
