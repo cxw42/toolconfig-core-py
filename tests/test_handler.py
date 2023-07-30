@@ -5,13 +5,26 @@
 
 import pytest
 
-from toolconfig_core.handler import ToolConfigHandler
+from toolconfig_core import EC_CONFIG_NAME, TC_CONFIG_NAME
 from toolconfig_core.exceptions import PathError
+from toolconfig_core.handler import ToolConfigHandler
 
 
 def test_nonabsolute_target():
     with pytest.raises(PathError):
-        ToolConfigHandler('not-an-absolute-path')
+        ToolConfigHandler("not-an-absolute-path")
+
+
+def test_basic(tmp_tree):
+    tmp_tree.make(
+        {
+            EC_CONFIG_NAME: "root=true\n",
+            TC_CONFIG_NAME: "root=true\n",
+            "dir": {"file1": "42\n"},
+        }
+    )
+    assert True  # TODO RESUME HERE
+
 
 '''
 def test_empty_tcfile(tmp_path):
