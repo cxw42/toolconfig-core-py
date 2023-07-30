@@ -22,6 +22,14 @@ check: test
 test:
 	PYTHONPATH=src pytest tests
 
+.PHONY: cover coverage
+cover: coverage
+coverage:
+	PYTHONPATH=src pytest tests --cov=src --cov=tests \
+		--cov-report html:cover/
+	-xdg-open cover/index.html
+
+
 .PHONY: p prettyprint
 p: prettyprint
 prettyprint:
@@ -41,6 +49,8 @@ editable:
 lint:
 	pylint src tests
 
-.PHONY: html
+.PHONY: doc html
+doc: html
 html:
 	$(MAKE) -C doc html
+	-xdg-open doc/build/html/index.html

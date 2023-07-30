@@ -17,11 +17,28 @@ Setup: `make init`
 
 Then:
 
-1. Write tests
+1. Write pytest tests in `tests/`
 2. Hack hack!
 3. `make test`
-4. `make prettyprint`
-5. Commit
+4. Commit
+
+Before opening a PR, please also:
+
+1. `make prettyprint`
+2. `make cover`
+3. `make html` and make sure there are no errors/warnings
+
+### Documentation
+
+Docstrings are in [Google format], and documentation is generated using Sphinx.
+
+`make html` will generate the docs in `doc/build/html/` (and open them, on
+systems having xdg-open).
+
+### Code coverage
+
+`make cover` will produce a report in `cover/` (and open it on systems
+having xdg-open).
 
 ## Running the CLI
 
@@ -30,11 +47,17 @@ $ PYTHONPATH=src python -m toolconfig [ARGS]...
 ```
 or run in an [editable install].
 
-## Documentation
+## Please keep in mind when making changes
 
-Docstrings are in [Google format].
+### Documentation
 
-To generate docs, say `make html` and then open `doc/build/html/index.html`.
+Document using docstrings.  Class-constructor docs go in the class's docstring,
+not in `__init__()`'s docstring.
+
+### Coverage
+
+Files in `tests/` must have 100% coverage from `make cover`.  Files in
+`src` should have as high a test coverage as is practicable.
 
 [editable install]: https://setuptools.pypa.io/en/latest/userguide/development_mode.html
 [Google format]: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html

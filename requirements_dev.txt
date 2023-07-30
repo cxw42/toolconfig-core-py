@@ -4,5 +4,6 @@ isort
 myst-parser
 pylint
 pytest
+pytest-cov
 sphinx
 sphinx-argparse-cli
