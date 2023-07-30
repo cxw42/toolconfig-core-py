@@ -39,8 +39,18 @@ class ToolConfigFile(object):
         Args:
             target_path (str): Absolute path to the file of interest.
         """
-        # TODO RESUME HERE: ini.py:matches_filename()
-        raise NotImplementedError()
+        result = {}
+        for glob, properties in self.config.items():
+            # Skip top-level properties
+            if type(properties) != type(dict):
+                continue
+
+            if not self.matches(target_path, glob):
+                continue
+
+            result.update(properties)
+
+        return result
 
     @property
     def is_root(self):
