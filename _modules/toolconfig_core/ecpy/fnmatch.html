@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>toolconfig_core.ecpy.fnmatch &#8212; toolconfig-core 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=f6245a2f"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>toolconfig-core 0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>toolconfig_core.ecpy.fnmatch</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for toolconfig_core.ecpy.fnmatch</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Filename matching with shell patterns.</span>
+
+<span class="sd">fnmatch(FILENAME, PATTERN) matches according to the local convention.</span>
+<span class="sd">fnmatchcase(FILENAME, PATTERN) always takes case in account.</span>
+
+<span class="sd">The functions operate by translating the pattern into a regular</span>
+<span class="sd">expression.  They cache the compiled regular expressions for speed.</span>
+
+<span class="sd">The function translate(PATTERN) returns a regular expression</span>
+<span class="sd">corresponding to PATTERN.  (It does not compile it.)</span>
+
+<span class="sd">Based on code from fnmatch.py file distributed with Python 2.6.</span>
+
+<span class="sd">Licensed under PSF License (see LICENSE.PSF file).</span>
+
+<span class="sd">Changes to original fnmatch module:</span>
+<span class="sd">- translate function supports ``*`` and ``**`` similarly to fnmatch C library</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fnmatch&quot;</span><span class="p">,</span> <span class="s2">&quot;fnmatchcase&quot;</span><span class="p">,</span> <span class="s2">&quot;translate&quot;</span><span class="p">]</span>
+
+<span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">LEFT_BRACE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    (?&lt;! \\ )           # Not preceded by &quot;\&quot;</span>
+
+<span class="sd">    \{                  # &quot;{&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span>
+<span class="p">)</span>
+
+<span class="n">RIGHT_BRACE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    (?&lt;! \\ )           # Not preceded by &quot;\&quot;</span>
+
+<span class="sd">    \}                  # &quot;}&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span>
+<span class="p">)</span>
+
+<span class="n">NUMERIC_RANGE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    (               # Capture a number</span>
+<span class="sd">        [+-] ?      # Zero or one &quot;+&quot; or &quot;-&quot; characters</span>
+<span class="sd">        \d +        # One or more digits</span>
+<span class="sd">    )</span>
+
+<span class="sd">    \.\.            # &quot;..&quot;</span>
+
+<span class="sd">    (               # Capture a number</span>
+<span class="sd">        [+-] ?      # Zero or one &quot;+&quot; or &quot;-&quot; characters</span>
+<span class="sd">        \d +        # One or more digits</span>
+<span class="sd">    )</span>
+<span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="fnmatch"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.fnmatch.fnmatch">[docs]</a><span class="k">def</span> <span class="nf">fnmatch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test whether FILENAME matches PATTERN.</span>
+
+<span class="sd">    Patterns are Unix shell style:</span>
+
+<span class="sd">    - ``*``             matches everything except path separator</span>
+<span class="sd">    - ``**``            matches everything</span>
+<span class="sd">    - ``?``             matches any single character</span>
+<span class="sd">    - ``[seq]``         matches any character in seq</span>
+<span class="sd">    - ``[!seq]``        matches any char not in seq</span>
+<span class="sd">    - ``{s1,s2,s3}``    matches any of the strings given (separated by commas)</span>
+
+<span class="sd">    An initial period in FILENAME is not special.</span>
+<span class="sd">    Both FILENAME and PATTERN are first case-normalized</span>
+<span class="sd">    if the operating system requires it.</span>
+<span class="sd">    If you don&#39;t want this, use fnmatchcase(FILENAME, PATTERN).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pat</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">cached_translate</span><span class="p">(</span><span class="n">pat</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">_cache</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">num_groups</span> <span class="o">=</span> <span class="n">translate</span><span class="p">(</span><span class="n">pat</span><span class="p">)</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="n">_cache</span><span class="p">[</span><span class="n">pat</span><span class="p">]</span> <span class="o">=</span> <span class="n">regex</span><span class="p">,</span> <span class="n">num_groups</span>
+    <span class="k">return</span> <span class="n">_cache</span><span class="p">[</span><span class="n">pat</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="fnmatchcase"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.fnmatch.fnmatchcase">[docs]</a><span class="k">def</span> <span class="nf">fnmatchcase</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test whether FILENAME matches PATTERN, including case.</span>
+
+<span class="sd">    This is a version of fnmatch() which doesn&#39;t case-normalize</span>
+<span class="sd">    its arguments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">regex</span><span class="p">,</span> <span class="n">num_groups</span> <span class="o">=</span> <span class="n">cached_translate</span><span class="p">(</span><span class="n">pat</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">pattern_matched</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="p">(</span><span class="n">min_num</span><span class="p">,</span> <span class="n">max_num</span><span class="p">))</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">(),</span> <span class="n">num_groups</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="n">min_num</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_num</span><span class="p">):</span>
+            <span class="n">pattern_matched</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">pattern_matched</span></div>
+
+
+<div class="viewcode-block" id="translate"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.fnmatch.translate">[docs]</a><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">nested</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate a shell PATTERN to a regular expression.</span>
+
+<span class="sd">    There is no way to quote meta-characters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">index</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pat</span><span class="p">)</span>  <span class="c1"># Current index and length of pattern</span>
+    <span class="n">brace_level</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">in_brackets</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">is_escaped</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">matching_braces</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">LEFT_BRACE</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pat</span><span class="p">))</span> <span class="o">==</span>
+                       <span class="nb">len</span><span class="p">(</span><span class="n">RIGHT_BRACE</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pat</span><span class="p">)))</span>
+    <span class="n">numeric_groups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">:</span>
+        <span class="n">current_char</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="ow">and</span> <span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;.*&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;[^/]*&#39;</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;?&#39;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;[^/]&#39;</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;[&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">in_brackets</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">[&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="n">index</span>
+                <span class="n">has_slash</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">while</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="ow">and</span> <span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;]&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span> <span class="ow">and</span> <span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">:</span>
+                        <span class="n">has_slash</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                    <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">has_slash</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">[&#39;</span> <span class="o">+</span> <span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="p">:(</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="ow">and</span> <span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;!^&#39;</span><span class="p">:</span>
+                        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;[^&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;[&#39;</span>
+                    <span class="n">in_brackets</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">in_brackets</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">current_char</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">current_char</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;]&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">in_brackets</span> <span class="ow">and</span> <span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">]&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">current_char</span>
+                <span class="n">in_brackets</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;{&#39;</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">has_comma</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">while</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;}&#39;</span> <span class="ow">or</span> <span class="n">is_escaped</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;,&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_escaped</span><span class="p">:</span>
+                    <span class="n">has_comma</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+                <span class="n">is_escaped</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_escaped</span>
+                <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">has_comma</span> <span class="ow">and</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">:</span>
+                <span class="n">num_range</span> <span class="o">=</span> <span class="n">NUMERIC_RANGE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="p">:</span><span class="n">pos</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">num_range</span><span class="p">:</span>
+                    <span class="n">numeric_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">num_range</span><span class="o">.</span><span class="n">groups</span><span class="p">()))</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;([+-]?\d+)&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">inner_result</span><span class="p">,</span> <span class="n">inner_groups</span> <span class="o">=</span> <span class="n">translate</span><span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="p">:</span><span class="n">pos</span><span class="p">],</span>
+                                                           <span class="n">nested</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">{</span><span class="si">%s</span><span class="se">\\</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">inner_result</span><span class="p">,)</span>
+                    <span class="n">numeric_groups</span> <span class="o">+=</span> <span class="n">inner_groups</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">matching_braces</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;(?:&#39;</span>
+                <span class="n">brace_level</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">{&#39;</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;,&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">brace_level</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_escaped</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;|&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">,&#39;</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;}&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">brace_level</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_escaped</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;)&#39;</span>
+                <span class="n">brace_level</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">}&#39;</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pat</span><span class="p">[</span><span class="n">index</span><span class="p">:(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">==</span> <span class="s2">&quot;**/&quot;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;(?:/|/.*/)&quot;</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">3</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
+        <span class="k">elif</span> <span class="n">current_char</span> <span class="o">!=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_char</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_escaped</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+            <span class="n">is_escaped</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">is_escaped</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">is_escaped</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">nested</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?s)</span><span class="si">%s</span><span class="s1">\Z&#39;</span> <span class="o">%</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">numeric_groups</span></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.1.
+    </div>
+  </body>
+</html>

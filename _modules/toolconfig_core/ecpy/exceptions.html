@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>toolconfig_core.ecpy.exceptions &#8212; toolconfig-core 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=f6245a2f"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>toolconfig-core 0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>toolconfig_core.ecpy.exceptions</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for toolconfig_core.ecpy.exceptions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;EditorConfig exception classes</span>
+
+<span class="sd">Licensed under Simplified BSD License (see LICENSE.BSD file).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="EditorConfigError"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.exceptions.EditorConfigError">[docs]</a><span class="k">class</span> <span class="nc">EditorConfigError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parent class of all exceptions raised by EditorConfig&quot;&quot;&quot;</span></div>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">ParsingError</span> <span class="k">as</span> <span class="n">_ParsingError</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">configparser</span> <span class="kn">import</span> <span class="n">ParsingError</span> <span class="k">as</span> <span class="n">_ParsingError</span>
+
+
+<div class="viewcode-block" id="ParsingError"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.exceptions.ParsingError">[docs]</a><span class="k">class</span> <span class="nc">ParsingError</span><span class="p">(</span><span class="n">_ParsingError</span><span class="p">,</span> <span class="n">EditorConfigError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error raised if an EditorConfig file could not be parsed&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PathError"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.exceptions.PathError">[docs]</a><span class="k">class</span> <span class="nc">PathError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">EditorConfigError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error raised if invalid filepath is specified&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="VersionError"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.exceptions.VersionError">[docs]</a><span class="k">class</span> <span class="nc">VersionError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">EditorConfigError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error raised if invalid version number is specified&quot;&quot;&quot;</span></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.1.
+    </div>
+  </body>
+</html>

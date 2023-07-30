@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Contributing to toolconfig-core-py &#8212; toolconfig-core 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f6245a2f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src" href="modules.html" />
+    <link rel="prev" title="README for toolconfig-core-py" href="readme.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>toolconfig-core 0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>Contributing to toolconfig-core-py</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="readme.html">README for toolconfig-core-py</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modules.html">src</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="contributing-to-toolconfig-core-py">
+<h1>Contributing to toolconfig-core-py<a class="headerlink" href="#contributing-to-toolconfig-core-py" title="Permalink to this heading">¶</a></h1>
+<p>Thank you!!</p>
+<section id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pytest</span></code> for testing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">black</span></code> for pretty-printing</p></li>
+<li><p>Python’s <code class="docutils literal notranslate"><span class="pre">build</span></code> module and <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> for building</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx</span></code> for documentation</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> gives you convenient access to common development commands.</p>
+</section>
+<section id="workflow">
+<h2>Workflow<a class="headerlink" href="#workflow" title="Permalink to this heading">¶</a></h2>
+<p>Setup: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">init</span></code></p>
+<p>Then:</p>
+<ol class="arabic simple">
+<li><p>Write tests</p></li>
+<li><p>Hack hack!</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">prettyprint</span></code></p></li>
+<li><p>Commit</p></li>
+</ol>
+</section>
+<section id="running-the-cli">
+<h2>Running the CLI<a class="headerlink" href="#running-the-cli" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=src python -m toolconfig [ARGS]...
+</pre></div>
+</div>
+<p>or run in an <a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html">editable install</a>.</p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
+<p>Docstrings are in <a class="reference external" href="https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html">Google format</a>.</p>
+<p>To generate docs, say <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code> and then open <code class="docutils literal notranslate"><span class="pre">doc/build/html/index.html</span></code>.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="readme.html">README for toolconfig-core-py</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modules.html">src</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.1.
+    </div>
+  </body>
+</html>

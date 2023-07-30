@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>toolconfig_core.config_file &#8212; toolconfig-core 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/haiku.css?v=d31ea6cb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>toolconfig-core 0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>toolconfig_core.config_file</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for toolconfig_core.config_file</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Part of toolconfig-core-py</span>
+<span class="c1"># Copyright (c) 2011-2023 EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White</span>
+<span class="c1"># SPDX-License-Identifier: BSD-2-Clause</span>
+
+<span class="sd">&quot;&quot;&quot;Finding and processing ToolConfig files&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">tomli</span>
+
+<span class="kn">from</span> <span class="nn">toolconfig_core</span> <span class="kn">import</span> <span class="n">EC_CONFIG_NAME</span><span class="p">,</span> <span class="n">TC_CONFIG_NAME</span>
+<span class="kn">from</span> <span class="nn">toolconfig_core.ecpy.ini</span> <span class="kn">import</span> <span class="n">EditorConfigFile</span>
+<span class="kn">from</span> <span class="nn">toolconfig_core.exceptions</span> <span class="kn">import</span> <span class="n">ParsingError</span>
+<span class="kn">from</span> <span class="nn">toolconfig_core.glob</span> <span class="kn">import</span> <span class="n">matches_filename</span>
+
+
+<div class="viewcode-block" id="ToolConfigFile"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.ToolConfigFile">[docs]</a><span class="k">class</span> <span class="nc">ToolConfigFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a ToolConfig file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tc_path (str): the absolute path of the toolconfig file</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        OSError: if the toolconfig file for this instance cannot be opened</span>
+<span class="sd">        toolconfig_core.exceptions.ParsingError: if there is a parsing problem</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tc_path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tc_path</span> <span class="o">=</span> <span class="n">tc_path</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tc_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">tomli</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">tomli</span><span class="o">.</span><span class="n">TOMLDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not load </span><span class="si">{</span><span class="n">tc_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+<div class="viewcode-block" id="ToolConfigFile.settings_for"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.ToolConfigFile.settings_for">[docs]</a>    <span class="k">def</span> <span class="nf">settings_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the options applicable to a file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target_path (str): Absolute path to the file of interest.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">glob</span><span class="p">,</span> <span class="n">properties</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Skip top-level properties</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">matches_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tc_path</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">target_path</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;root&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ConfigFile"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.ConfigFile">[docs]</a><span class="k">class</span> <span class="nc">ConfigFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the config file in a directory.</span>
+
+<span class="sd">    Load the file called TC_CONFIG_NAME if it exists,</span>
+<span class="sd">    otherwise the file called EC_CONFIG_NAME.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dir_name (str): The directory to look in</span>
+<span class="sd">        ec_name (str): The name of EditorConfig files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_name</span><span class="p">,</span> <span class="n">ec_name</span><span class="o">=</span><span class="n">EC_CONFIG_NAME</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dir_name</span> <span class="o">=</span> <span class="n">dir_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ec</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tc</span> <span class="o">=</span> <span class="n">ToolConfigFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_name</span><span class="p">,</span> <span class="n">TC_CONFIG_NAME</span><span class="p">))</span>
+
+            <span class="c1"># If there&#39;s a TC file, we don&#39;t look for an EC file.</span>
+            <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ec</span> <span class="o">=</span> <span class="n">EditorConfigFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_name</span><span class="p">,</span> <span class="n">ec_name</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="o">.</span><span class="n">is_root</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ec</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ec</span><span class="o">.</span><span class="n">root_file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="ConfigFile.settings_for"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.ConfigFile.settings_for">[docs]</a>    <span class="k">def</span> <span class="nf">settings_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the settings for target_path, which may or may not exist.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target_path (str): Absolute path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="o">.</span><span class="n">settings_for</span><span class="p">(</span><span class="n">target_filename</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ec</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ec</span><span class="o">.</span><span class="n">settings_for</span><span class="p">(</span><span class="n">target_filename</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span></div></div>
+
+
+<div class="viewcode-block" id="dirs_for"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.dirs_for">[docs]</a><span class="k">def</span> <span class="nf">dirs_for</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield each directory from the dir containing ``filename`` up to the root.&quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">newpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">newpath</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">newpath</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">newpath</span></div>
+
+
+<div class="viewcode-block" id="find_root_dir"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.find_root_dir">[docs]</a><span class="k">def</span> <span class="nf">find_root_dir</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the project root directory for ``filename``.&quot;&quot;&quot;</span>
+    <span class="n">last_dir</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs_for</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="n">last_dir</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigFile</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">is_root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">d</span>
+
+    <span class="k">return</span> <span class="n">last_dir</span></div>
+
+
+<div class="viewcode-block" id="get_filenames"><a class="viewcode-back" href="../../toolconfig_core.html#toolconfig_core.config_file.get_filenames">[docs]</a><span class="k">def</span> <span class="nf">get_filenames</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return full filepaths for filename in each directory in and above path&quot;&quot;&quot;</span>
+    <span class="n">path_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">path_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+        <span class="n">newpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">newpath</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">newpath</span>
+    <span class="k">return</span> <span class="n">path_list</span></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>toolconfig_core.ecpy.handler &#8212; toolconfig-core 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=f6245a2f"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>toolconfig-core 0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>toolconfig_core.ecpy.handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for toolconfig_core.ecpy.handler</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;EditorConfig file handler</span>
+
+<span class="sd">Provides ``EditorConfigHandler`` class for locating and parsing</span>
+<span class="sd">EditorConfig files relevant to a given filepath.</span>
+
+<span class="sd">Licensed under Simplified BSD License (see LICENSE.BSD file).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">toolconfig_core.ecpy</span> <span class="kn">import</span> <span class="n">VERSION</span>
+<span class="kn">from</span> <span class="nn">toolconfig_core.ecpy.exceptions</span> <span class="kn">import</span> <span class="n">PathError</span><span class="p">,</span> <span class="n">VersionError</span>
+<span class="kn">from</span> <span class="nn">toolconfig_core.ecpy.ini</span> <span class="kn">import</span> <span class="n">EditorConfigParser</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;EditorConfigHandler&#39;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_filenames</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield full filepath for filename in each directory in and above path&quot;&quot;&quot;</span>
+    <span class="n">path_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">path_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+        <span class="n">newpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">newpath</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">newpath</span>
+    <span class="k">return</span> <span class="n">path_list</span>
+
+
+<div class="viewcode-block" id="EditorConfigHandler"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.handler.EditorConfigHandler">[docs]</a><span class="k">class</span> <span class="nc">EditorConfigHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allows locating and parsing of EditorConfig files for given filename</span>
+
+<span class="sd">    In addition to the constructor a single public method is provided,</span>
+<span class="sd">    ``get_configurations`` which returns the EditorConfig options for</span>
+<span class="sd">    the ``filepath`` specified to the constructor.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">conf_filename</span><span class="o">=</span><span class="s1">&#39;.editorconfig&#39;</span><span class="p">,</span>
+                 <span class="n">version</span><span class="o">=</span><span class="n">VERSION</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create EditorConfigHandler for matching given filepath&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf_filename</span> <span class="o">=</span> <span class="n">conf_filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="EditorConfigHandler.get_configurations"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.handler.EditorConfigHandler.get_configurations">[docs]</a>    <span class="k">def</span> <span class="nf">get_configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find EditorConfig files and return all options matching filepath</span>
+
+<span class="sd">        Special exceptions that may be raised by this function include:</span>
+
+<span class="sd">        - ``VersionError``: self.version is invalid EditorConfig version</span>
+<span class="sd">        - ``PathError``: self.filepath is not a valid absolute filepath</span>
+<span class="sd">        - ``ParsingError``: improperly formatted EditorConfig file found</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_assertions</span><span class="p">()</span>
+        <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="n">conf_files</span> <span class="o">=</span> <span class="n">get_filenames</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf_filename</span><span class="p">)</span>
+
+        <span class="c1"># Attempt to find and parse every EditorConfig file in filetree</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">conf_files</span><span class="p">:</span>
+            <span class="n">parser</span> <span class="o">=</span> <span class="n">EditorConfigParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+            <span class="c1"># Merge new EditorConfig file&#39;s options into current options</span>
+            <span class="n">old_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">options</span>
+            <span class="k">if</span> <span class="n">old_options</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">old_options</span><span class="p">)</span>
+
+            <span class="c1"># Stop parsing if parsed file has a ``root = true`` option</span>
+            <span class="k">if</span> <span class="n">parser</span><span class="o">.</span><span class="n">root_file</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_values</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span></div>
+
+<div class="viewcode-block" id="EditorConfigHandler.check_assertions"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.handler.EditorConfigHandler.check_assertions">[docs]</a>    <span class="k">def</span> <span class="nf">check_assertions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Raise error if filepath or version have invalid values&quot;&quot;&quot;</span>
+
+        <span class="c1"># Raise ``PathError`` if filepath isn&#39;t an absolute path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">PathError</span><span class="p">(</span><span class="s2">&quot;Input file must be a full path name.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Raise ``VersionError`` if version specified is greater than current</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">VERSION</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">VersionError</span><span class="p">(</span>
+                <span class="s2">&quot;Required version is greater than the current version.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditorConfigHandler.preprocess_values"><a class="viewcode-back" href="../../../toolconfig_core.ecpy.html#toolconfig_core.ecpy.handler.EditorConfigHandler.preprocess_values">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preprocess option values for consumption by plugins&quot;&quot;&quot;</span>
+
+        <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+
+        <span class="c1"># Lowercase option value for certain options</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;end_of_line&quot;</span><span class="p">,</span> <span class="s2">&quot;indent_style&quot;</span><span class="p">,</span> <span class="s2">&quot;indent_size&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;insert_final_newline&quot;</span><span class="p">,</span> <span class="s2">&quot;trim_trailing_whitespace&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;charset&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+                <span class="n">opts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Set indent_size to &quot;tab&quot; if indent_size is unspecified and</span>
+        <span class="c1"># indent_style is set to &quot;tab&quot;.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;indent_style&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;tab&quot;</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="s2">&quot;indent_size&quot;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;indent_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;tab&quot;</span>
+
+        <span class="c1"># Set tab_width to indent_size if indent_size is specified and</span>
+        <span class="c1"># tab_width is unspecified</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;indent_size&quot;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">and</span> <span class="s2">&quot;tab_width&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">and</span>
+                <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;indent_size&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;tab&quot;</span><span class="p">):</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tab_width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;indent_size&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Set indent_size to tab_width if indent_size is &quot;tab&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;indent_size&quot;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">and</span> <span class="s2">&quot;tab_width&quot;</span> <span class="ow">in</span> <span class="n">opts</span> <span class="ow">and</span>
+                <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;indent_size&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;tab&quot;</span><span class="p">):</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;indent_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tab_width&quot;</span><span class="p">]</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.1.
+    </div>
+  </body>
+</html>

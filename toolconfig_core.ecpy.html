@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>toolconfig_core.ecpy package &#8212; toolconfig-core 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=d31ea6cb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f6245a2f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="toolconfig_core package" href="toolconfig_core.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>toolconfig-core 0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>toolconfig_core.ecpy package</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="toolconfig_core.html">toolconfig_core package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="toolconfig-core-ecpy-package">
+<h1>toolconfig_core.ecpy package<a class="headerlink" href="#toolconfig-core-ecpy-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-toolconfig_core.ecpy.compat">
+<span id="toolconfig-core-ecpy-compat-module"></span><h2>toolconfig_core.ecpy.compat module<a class="headerlink" href="#module-toolconfig_core.ecpy.compat" title="Permalink to this heading">¶</a></h2>
+<p>EditorConfig Python2/Python3 compatibility utilities</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.compat.force_unicode">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.compat.</span></span><span class="sig-name descname"><span class="pre">force_unicode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/compat.html#force_unicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.compat.force_unicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.compat.u">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.compat.</span></span><span class="sig-name descname"><span class="pre">u</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#toolconfig_core.ecpy.compat.u" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-toolconfig_core.ecpy.exceptions">
+<span id="toolconfig-core-ecpy-exceptions-module"></span><h2>toolconfig_core.ecpy.exceptions module<a class="headerlink" href="#module-toolconfig_core.ecpy.exceptions" title="Permalink to this heading">¶</a></h2>
+<p>EditorConfig exception classes</p>
+<p>Licensed under Simplified BSD License (see LICENSE.BSD file).</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.exceptions.EditorConfigError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.exceptions.</span></span><span class="sig-name descname"><span class="pre">EditorConfigError</span></span><a class="reference internal" href="_modules/toolconfig_core/ecpy/exceptions.html#EditorConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.exceptions.EditorConfigError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Parent class of all exceptions raised by EditorConfig</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.exceptions.ParsingError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.exceptions.</span></span><span class="sig-name descname"><span class="pre">ParsingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/exceptions.html#ParsingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.exceptions.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ParsingError</span></code>, <a class="reference internal" href="#toolconfig_core.ecpy.exceptions.EditorConfigError" title="toolconfig_core.ecpy.exceptions.EditorConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorConfigError</span></code></a></p>
+<p>Error raised if an EditorConfig file could not be parsed</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.exceptions.PathError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.exceptions.</span></span><span class="sig-name descname"><span class="pre">PathError</span></span><a class="reference internal" href="_modules/toolconfig_core/ecpy/exceptions.html#PathError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.exceptions.PathError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code>, <a class="reference internal" href="#toolconfig_core.ecpy.exceptions.EditorConfigError" title="toolconfig_core.ecpy.exceptions.EditorConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorConfigError</span></code></a></p>
+<p>Error raised if invalid filepath is specified</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.exceptions.VersionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.exceptions.</span></span><span class="sig-name descname"><span class="pre">VersionError</span></span><a class="reference internal" href="_modules/toolconfig_core/ecpy/exceptions.html#VersionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.exceptions.VersionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code>, <a class="reference internal" href="#toolconfig_core.ecpy.exceptions.EditorConfigError" title="toolconfig_core.ecpy.exceptions.EditorConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorConfigError</span></code></a></p>
+<p>Error raised if invalid version number is specified</p>
+</dd></dl>
+
+</section>
+<section id="module-toolconfig_core.ecpy.fnmatch">
+<span id="toolconfig-core-ecpy-fnmatch-module"></span><h2>toolconfig_core.ecpy.fnmatch module<a class="headerlink" href="#module-toolconfig_core.ecpy.fnmatch" title="Permalink to this heading">¶</a></h2>
+<p>Filename matching with shell patterns.</p>
+<p>fnmatch(FILENAME, PATTERN) matches according to the local convention.
+fnmatchcase(FILENAME, PATTERN) always takes case in account.</p>
+<p>The functions operate by translating the pattern into a regular
+expression.  They cache the compiled regular expressions for speed.</p>
+<p>The function translate(PATTERN) returns a regular expression
+corresponding to PATTERN.  (It does not compile it.)</p>
+<p>Based on code from fnmatch.py file distributed with Python 2.6.</p>
+<p>Licensed under PSF License (see LICENSE.PSF file).</p>
+<p>Changes to original fnmatch module:
+- translate function supports <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">**</span></code> similarly to fnmatch C library</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.fnmatch.fnmatch">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.fnmatch.</span></span><span class="sig-name descname"><span class="pre">fnmatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/fnmatch.html#fnmatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.fnmatch.fnmatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether FILENAME matches PATTERN.</p>
+<p>Patterns are Unix shell style:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>             matches everything except path separator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code>            matches everything</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">?</span></code>             matches any single character</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[seq]</span></code>         matches any character in seq</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[!seq]</span></code>        matches any char not in seq</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{s1,s2,s3}</span></code>    matches any of the strings given (separated by commas)</p></li>
+</ul>
+<p>An initial period in FILENAME is not special.
+Both FILENAME and PATTERN are first case-normalized
+if the operating system requires it.
+If you don’t want this, use fnmatchcase(FILENAME, PATTERN).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.fnmatch.fnmatchcase">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.fnmatch.</span></span><span class="sig-name descname"><span class="pre">fnmatchcase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/fnmatch.html#fnmatchcase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.fnmatch.fnmatchcase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether FILENAME matches PATTERN, including case.</p>
+<p>This is a version of fnmatch() which doesn’t case-normalize
+its arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.fnmatch.translate">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.fnmatch.</span></span><span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nested</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/fnmatch.html#translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.fnmatch.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a shell PATTERN to a regular expression.</p>
+<p>There is no way to quote meta-characters.</p>
+</dd></dl>
+
+</section>
+<section id="module-toolconfig_core.ecpy.handler">
+<span id="toolconfig-core-ecpy-handler-module"></span><h2>toolconfig_core.ecpy.handler module<a class="headerlink" href="#module-toolconfig_core.ecpy.handler" title="Permalink to this heading">¶</a></h2>
+<p>EditorConfig file handler</p>
+<p>Provides <code class="docutils literal notranslate"><span class="pre">EditorConfigHandler</span></code> class for locating and parsing
+EditorConfig files relevant to a given filepath.</p>
+<p>Licensed under Simplified BSD License (see LICENSE.BSD file).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.handler.EditorConfigHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.handler.</span></span><span class="sig-name descname"><span class="pre">EditorConfigHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.editorconfig'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">12,</span> <span class="pre">3,</span> <span class="pre">'final')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/handler.html#EditorConfigHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.handler.EditorConfigHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Allows locating and parsing of EditorConfig files for given filename</p>
+<p>In addition to the constructor a single public method is provided,
+<code class="docutils literal notranslate"><span class="pre">get_configurations</span></code> which returns the EditorConfig options for
+the <code class="docutils literal notranslate"><span class="pre">filepath</span></code> specified to the constructor.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.handler.EditorConfigHandler.check_assertions">
+<span class="sig-name descname"><span class="pre">check_assertions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/handler.html#EditorConfigHandler.check_assertions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.handler.EditorConfigHandler.check_assertions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise error if filepath or version have invalid values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.handler.EditorConfigHandler.get_configurations">
+<span class="sig-name descname"><span class="pre">get_configurations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/handler.html#EditorConfigHandler.get_configurations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.handler.EditorConfigHandler.get_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find EditorConfig files and return all options matching filepath</p>
+<p>Special exceptions that may be raised by this function include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">VersionError</span></code>: self.version is invalid EditorConfig version</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PathError</span></code>: self.filepath is not a valid absolute filepath</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ParsingError</span></code>: improperly formatted EditorConfig file found</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.handler.EditorConfigHandler.preprocess_values">
+<span class="sig-name descname"><span class="pre">preprocess_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/handler.html#EditorConfigHandler.preprocess_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.handler.EditorConfigHandler.preprocess_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess option values for consumption by plugins</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-toolconfig_core.ecpy.ini">
+<span id="toolconfig-core-ecpy-ini-module"></span><h2>toolconfig_core.ecpy.ini module<a class="headerlink" href="#module-toolconfig_core.ecpy.ini" title="Permalink to this heading">¶</a></h2>
+<p>EditorConfig file parser</p>
+<p>Based on code from ConfigParser.py file distributed with Python 2.6.</p>
+<p>Licensed under PSF License (see LICENSE.PSF file).</p>
+<p>Changes to original ConfigParser:</p>
+<ul class="simple">
+<li><p>Special characters can be used in section names</p></li>
+<li><p>Octothorpe can be used for comments (not just at beginning of line)</p></li>
+<li><p>Only track INI options in sections that match target filename</p></li>
+<li><p>Stop parsing files with when <code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">=</span> <span class="pre">true</span></code> is found</p></li>
+<li><p>Add EditorConfigFile</p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.EditorConfigParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.ini.</span></span><span class="sig-name descname"><span class="pre">EditorConfigParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/ini.html#EditorConfigParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.ini.EditorConfigParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parser for EditorConfig-style configuration files</p>
+<p>Based on RawConfigParser from ConfigParser.py in Python 2.6.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.EditorConfigParser.OPTCRE">
+<span class="sig-name descname"><span class="pre">OPTCRE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\\s</span> <span class="pre">*</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Optional</span> <span class="pre">whitespace\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">(?P&lt;option&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">One</span> <span class="pre">or</span> <span class="pre">more</span> <span class="pre">characters</span> <span class="pre">excluding\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[^:=\\s]</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">,</span> <span class="pre">re.VERBOSE)</span></em><a class="headerlink" href="#toolconfig_core.ecpy.ini.EditorConfigParser.OPTCRE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.EditorConfigParser.SECTCRE">
+<span class="sig-name descname"><span class="pre">SECTCRE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\\s</span> <span class="pre">*</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Optional</span> <span class="pre">whitespace\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\\[</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Opening</span> <span class="pre">square</span> <span class="pre">brace\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">(?P&lt;header&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">One</span> <span class="pre">or</span> <span class="pre">mor,</span> <span class="pre">re.VERBOSE)</span></em><a class="headerlink" href="#toolconfig_core.ecpy.ini.EditorConfigParser.SECTCRE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.EditorConfigParser.matches_filename">
+<span class="sig-name descname"><span class="pre">matches_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/ini.html#EditorConfigParser.matches_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.ini.EditorConfigParser.matches_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if section glob matches filename</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.EditorConfigParser.optionxform">
+<span class="sig-name descname"><span class="pre">optionxform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optionstr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/ini.html#EditorConfigParser.optionxform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.ini.EditorConfigParser.optionxform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.EditorConfigParser.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ec_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/ini.html#EditorConfigParser.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.ini.EditorConfigParser.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and parse single EditorConfig file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.ini.ParsingError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.ini.</span></span><span class="sig-name descname"><span class="pre">ParsingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/exceptions.html#ParsingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.ini.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ParsingError</span></code>, <a class="reference internal" href="#toolconfig_core.ecpy.exceptions.EditorConfigError" title="toolconfig_core.ecpy.exceptions.EditorConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorConfigError</span></code></a></p>
+<p>Error raised if an EditorConfig file could not be parsed</p>
+</dd></dl>
+
+</section>
+<section id="module-toolconfig_core.ecpy.version">
+<span id="toolconfig-core-ecpy-version-module"></span><h2>toolconfig_core.ecpy.version module<a class="headerlink" href="#module-toolconfig_core.ecpy.version" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-toolconfig_core.ecpy.versiontools">
+<span id="toolconfig-core-ecpy-versiontools-module"></span><h2>toolconfig_core.ecpy.versiontools module<a class="headerlink" href="#module-toolconfig_core.ecpy.versiontools" title="Permalink to this heading">¶</a></h2>
+<p>EditorConfig version tools</p>
+<p>Provides <code class="docutils literal notranslate"><span class="pre">join_version</span></code> and <code class="docutils literal notranslate"><span class="pre">split_version</span></code> classes for converting
+__version__ strings to VERSION tuples and vice versa.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.versiontools.join_version">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.versiontools.</span></span><span class="sig-name descname"><span class="pre">join_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version_tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/versiontools.html#join_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.versiontools.join_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string representation of version from given VERSION tuple</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.versiontools.split_version">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.versiontools.</span></span><span class="sig-name descname"><span class="pre">split_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy/versiontools.html#split_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.versiontools.split_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return VERSION tuple for given string representation of version</p>
+</dd></dl>
+
+</section>
+<section id="module-toolconfig_core.ecpy">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-toolconfig_core.ecpy" title="Permalink to this heading">¶</a></h2>
+<p>EditorConfig Python Core</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.EditorConfigError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.</span></span><span class="sig-name descname"><span class="pre">EditorConfigError</span></span><a class="reference internal" href="_modules/toolconfig_core/ecpy/exceptions.html#EditorConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.EditorConfigError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Parent class of all exceptions raised by EditorConfig</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolconfig_core.ecpy.get_properties">
+<span class="sig-prename descclassname"><span class="pre">toolconfig_core.ecpy.</span></span><span class="sig-name descname"><span class="pre">get_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/toolconfig_core/ecpy.html#get_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolconfig_core.ecpy.get_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locate and parse EditorConfig files for the given filename</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="toolconfig_core.html">toolconfig_core package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, EditorConfig Team, including Hong Xu, Trey Hunner, and Christopher White.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.1.
+    </div>
+  </body>
+</html>
