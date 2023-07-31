@@ -53,5 +53,6 @@ lint:
 .PHONY: doc html
 doc: html
 html:
+	$(MAKE) -C doc apidoc
 	$(MAKE) -C doc html
 	-xdg-open doc/build/html/index.html
