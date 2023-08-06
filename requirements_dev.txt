@@ -1,5 +1,6 @@
 black
 build
+cli-test-helpers
 isort
 myst-parser
 pylint
