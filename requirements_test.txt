@@ -1,0 +1,5 @@
+# requirements_test.txt: requirements for running tests
+cli-test-helpers
+pytest>=7.0.0   # for the `pythonpath` setting
+pytest-cov
+tox==4.8.0

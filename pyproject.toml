@@ -30,6 +30,9 @@ legacy_tox_ini = '''
         py312
 
     [testenv]
-    deps = pytest
+    deps =
+        -r requirements.txt
+        -r requirements_test.txt
+
     commands = pytest
 '''
