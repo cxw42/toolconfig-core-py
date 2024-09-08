@@ -48,3 +48,11 @@ toolconfig\_core.handler module
    :members:
    :undoc-members:
    :show-inheritance:
+
+toolconfig\_core.normalize module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: toolconfig_core.normalize
+   :members:
+   :undoc-members:
+   :show-inheritance:

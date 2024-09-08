@@ -1,11 +1,12 @@
 black
 build
 cli-test-helpers
+furo    # Sphinx theme
 isort
 myst-parser
 pylint
 pytest>=7.0.0   # for the `pythonpath` setting
 pytest-cov
-sphinx
+sphinx>=2.2.0
 sphinx-argparse-cli
 tox==4.8.0

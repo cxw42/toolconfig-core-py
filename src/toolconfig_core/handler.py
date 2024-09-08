@@ -15,7 +15,6 @@ from toolconfig_core.exceptions import PathError
 
 
 class ToolConfigHandler(object):
-
     """
     Allows locating and parsing of ToolConfig files for given filename
 
