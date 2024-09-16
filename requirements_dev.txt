@@ -4,7 +4,8 @@ cli-test-helpers
 isort
 myst-parser
 pylint
-pytest
+pytest>=7.0.0   # for the `pythonpath` setting
 pytest-cov
 sphinx
 sphinx-argparse-cli
+tox==4.8.0
