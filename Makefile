@@ -3,6 +3,9 @@
 # Copyright (c) 2023 Christopher White.
 # SPDX-License-Identifier: BSD-2-Clause
 
+.PHONY: all
+all: init test
+
 .PHONY: install-deps init
 install-deps: init
 init:
@@ -21,12 +24,12 @@ build:
 .PHONY: check test
 check: test
 test:
-	PYTHONPATH=src pytest tests
+	pytest
 
 .PHONY: cover coverage
 cover: coverage
 coverage:
-	PYTHONPATH=src pytest tests --cov=src --cov=tests \
+	pytest --cov=src --cov=tests \
 		--cov-report html:cover/
 	-xdg-open cover/index.html
 

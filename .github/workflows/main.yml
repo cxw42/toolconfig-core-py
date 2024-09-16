@@ -1,0 +1,44 @@
+name: toolconfig-core-py PR testing
+
+on:
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch: # Manual run.
+
+jobs:
+  pytest:
+    name: Run pytests
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Install Python versions
+        run: |
+          sudo apt-add-repository --yes --update ppa:deadsnakes/ppa
+          sudo apt install -y --no-install-recommends \
+            python3.7 python3.8 python3.9 python3.10 python3.11 python3.12 \
+            python3.7-distutils python3.8-distutils python3.9-distutils \
+            python3.10-distutils python3.11-distutils python3.12-distutils
+
+      # TODO Get Pythons 3.7--3.11 from deadsnakes
+
+      - name: Create venv and install Python deps (system default python3)
+        run: |
+          python3 -m venv .venv
+          . .venv/bin/activate
+          python -m ensurepip
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements_test.txt
+
+      - name: Run test
+        run: |
+          . .venv/bin/activate
+          tox   # not parallel, since parallel output reports Skip as Success

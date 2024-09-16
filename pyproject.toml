@@ -12,6 +12,27 @@ extend_skip_glob = ["**/ecpy/*"]
 
 # Testing
 [tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
+pythonpath = ["src"]
+
+[tool.tox]
+# Tox config for tox==4.8.0
+legacy_tox_ini = '''
+    [tox]
+    min_version = 4.8.0 # Latest with Py3.7 support
+    skip_missing_interpreters = true
+
+    envlist =
+        py37
+        py38
+        py39
+        py310
+        py311
+        py312
+
+    [testenv]
+    deps =
+        -r requirements.txt
+        -r requirements_test.txt
+
+    commands = pytest
+'''
